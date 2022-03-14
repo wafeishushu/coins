@@ -7336,7 +7336,7 @@
     "mm2": 1
   },
   {
-    "coin": "ADEX-SOL-DEVNET",
+    "coin": "ADEXSPL-DEVNET",
     "protocol": {
       "type": "SPLTOKEN",
       "protocol_data": {
