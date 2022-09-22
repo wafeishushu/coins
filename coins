@@ -11723,29 +11723,29 @@
     }
   },
   {
-    "coin":"USDC-IBC-IRIS-TEST",
+    "coin":"USDC_IBC_IRIS_TEST",
     "protocol":{
       "type":"TENDERMINTTOKEN",
       "protocol_data":{
-        "platform":"IRIS-TEST",
+        "platform":"IRIS_TEST",
         "decimals":6,
         "denom":"ibc/5C465997B4F582F602CD64E12031C6A6E18CAF1E6EDC9B5D808822DC0B5F850C"
       }
     }
   },
   {
-    "coin":"IRIS-NIMDA-TEST",
+    "coin":"IRIS_NIMDA_TEST",
     "protocol":{
       "type":"TENDERMINTTOKEN",
       "protocol_data":{
-        "platform":"IRIS-TEST",
+        "platform":"IRIS_TEST",
         "decimals":6,
         "denom":"nim"
       }
     }
   },
   {
-    "coin":"IRIS-TEST",
+    "coin":"IRIS_TEST",
     "protocol":{
       "type":"TENDERMINT",
       "protocol_data":{
@@ -11769,7 +11769,7 @@
     }
   },
   {
-    "coin":"ATOM-IBC-IRIS",
+    "coin":"ATOM-IBC_IRIS",
     "protocol":{
       "type":"TENDERMINTTOKEN",
       "protocol_data":{
