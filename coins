@@ -11775,7 +11775,7 @@
       "protocol_data":{
         "platform":"IRIS",
         "decimals":6,
-        "denom":"IBC/A8C2D23A1E6F95DA4E48BA349667E322BD7A6C996D8A4AAE8BA72E190F3D1477"
+        "denom":"ibc/A8C2D23A1E6F95DA4E48BA349667E322BD7A6C996D8A4AAE8BA72E190F3D1477"
       }
     }
   }
