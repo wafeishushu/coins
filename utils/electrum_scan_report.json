@@ -3281,19 +3281,19 @@
     },
     "THC": {
         "electrums_total_all": 2,
-        "electrums_working_all": 2,
+        "electrums_working_all": 1,
         "electrums_total_tcp": 2,
-        "electrums_working_tcp": 2,
+        "electrums_working_tcp": 1,
         "electrums_total_ssl": 0,
         "electrums_working_ssl": 0,
         "tcp": {
-            "1.eu.thc.electrum.dexstats.info:10020": [
-                true,
-                "Passed"
-            ],
             "2.eu.thc.electrum.dexstats.info:10020": [
                 true,
                 "Passed"
+            ],
+            "1.eu.thc.electrum.dexstats.info:10020": [
+                false,
+                "timed out"
             ]
         },
         "ssl": {},
