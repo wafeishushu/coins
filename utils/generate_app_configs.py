@@ -333,9 +333,8 @@ class CoinConfig:
                     "fallback_swap_contract": contract_data["fallback_swap_contract"]
                 })
             if "rpc_nodes" in contract_data:
-                nodes = [i["url"] for i in contract_data["rpc_nodes"]]
                 self.data[self.ticker].update({
-                    "nodes": nodes
+                    "nodes": contract_data["rpc_nodes"]
                 })
 
     def get_explorers(self):
@@ -569,5 +568,15 @@ if __name__ == "__main__":
             compare_output_vs_desktop_repo(coins_config)
     else:
         coins_config = parse_coins_repo()
+        # For `enable_eth_with_tokens`
+        with open("coins_config.json", "w+") as f:
+            json.dump(coins_config, f, indent=4)
+            pass
+
+        # For `enable` (use on desktop until updated)
+        for coin in coins_config:
+            if "nodes" in coins_config[coin]:
+                nodes = [i["url"] for i in coins_config[coin]["nodes"]]
+                coins_config[coin].update({"nodes": nodes})
         with open("coins_config.json", "w+") as f:
             json.dump(coins_config, f, indent=4)
