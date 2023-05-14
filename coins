@@ -1968,7 +1968,6 @@
     "wiftype": 128,
     "segwit": true,
     "bech32_hrp": "bc",
-    "avg_blocktime": 600,
     "address_format": {
       "format": "segwit"
     },
