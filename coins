@@ -13803,9 +13803,9 @@
             28,
             189
           ]
-        }
-      },
-      "z_derivation_path": "m/32'/141'"
+        },
+        "z_derivation_path": "m/32'/141'"
+      }
     },
     "required_confirmations": 3,
     "derivation_path": "m/44'/141'"
