@@ -94,6 +94,8 @@ def thread_ws(coin, ip, port, method, params):
         passed_ws[coin].append(f"{ip}:{port}")
 
     except Exception as e:
+        # TODO: Fix this
+        resp = ""
         if str(resp).find('{"jsonrpc": "2.0"') > -1:
             if coin not in passed_ws:
                 passed_ws.update({coin:[]})
