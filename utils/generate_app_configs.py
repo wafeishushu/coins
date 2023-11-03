@@ -589,6 +589,22 @@ def filter_wss(coins_config):
         json.dump(coins_config_wss, f, indent=4)
     return coins_config_wss
 
+def scan_segwit(coins_config):
+    no_tc = []
+    no_dv = []
+    bad_dv = []
+    for coin in coins_config:
+        if coin.endswith('-segwit'):
+            if "derivation_path" not in coins_config[coin]:
+                print(colorize(f"{coin} has no derivation path!", 'red'))
+                no_dv.append(coin)
+            elif coins_config[coin]["derivation_path"].startswith("m/84'") == False:
+                print(colorize(f"{coin} has non-segwit derivation path!", 'red'))
+                bad_dv.append(coin)
+            if "trezor_coin" not in coins_config[coin]:
+                print(colorize(f"{coin} has no trezor coin!", 'red'))
+                no_tc.append(coin)
+    return no_dv, bad_dv, no_tc
 
 
 if __name__ == "__main__":
@@ -611,3 +627,9 @@ if __name__ == "__main__":
     print(f"Total coins with SSL: {len(coins_config_ssl)}")
     print(f"Total coins with TCP: {len(coins_config_tcp)}")
     print(f"Total coins with WSS: {len(coins_config_wss)}")
+    no_dv, bad_dv, no_tc = scan_segwit(coins_config)
+    print(f"Segwit coins with no derivation path: {no_dv}")
+    print(f"Segwit coins with bad derivation path: {bad_dv}")
+    print(f"Segwit coins with no trezor coin: {no_tc}")
+    
+    

@@ -75,7 +75,7 @@ for coin in segwit_coins:
             proto = i['protocol']['type']
             if proto in ["UTXO", "QTUM"]:
                 if 'derivation_path' in i:
-                    path = i['derivation_path']
+                    path = i['derivation_path'].replace("m/44'", "m/84'")
     for i in coins:
         if i["coin"] == coin:
             if path != "":
