@@ -411,7 +411,7 @@ def parse_coins_repo():
     for item in coins_data:
         
         if item["mm2"] == 1:
-                config = CoinConfig(item, False)
+                config = CoinConfig(item)
                 config.get_generics()
                 config.get_protocol_info()
                 config.clean_name()
