@@ -1,0 +1,92 @@
+{
+    "AVX-20": {
+        "parent_coin": "AVAX",
+        "swap_contract_address": "0x9130b257D37A52E52F21054c4DA3450c72f595CE",
+        "fallback_swap_contract": "0x9130b257D37A52E52F21054c4DA3450c72f595CE"
+    },
+    "Matic": {
+        "parent_coin": "MATIC",
+        "swap_contract_address": "0x9130b257D37A52E52F21054c4DA3450c72f595CE",
+        "fallback_swap_contract": "0x9130b257D37A52E52F21054c4DA3450c72f595CE"
+    },
+    "BEP-20": {
+        "parent_coin": "BNB",
+        "swap_contract_address": "0xeDc5b89Fe1f0382F9E4316069971D90a0951DB31",
+        "fallback_swap_contract": "0xeDc5b89Fe1f0382F9E4316069971D90a0951DB31"
+    },
+    "ERC-20": {
+        "parent_coin": "ETH",
+        "swap_contract_address": "0x24ABE4c71FC658C91313b6552cd40cD808b3Ea80",
+        "fallback_swap_contract": "0x8500AFc0bc5214728082163326C2FF0C73f4a871"
+    },
+    "KRC-20": {
+        "parent_coin": "KCS",
+        "swap_contract_address": "0x9130b257D37A52E52F21054c4DA3450c72f595CE",
+        "fallback_swap_contract": "0x9130b257D37A52E52F21054c4DA3450c72f595CE"
+    },
+    "FTM-20": {
+        "parent_coin": "FTM",
+        "swap_contract_address": "0x9130b257D37A52E52F21054c4DA3450c72f595CE",
+        "fallback_swap_contract": "0x9130b257D37A52E52F21054c4DA3450c72f595CE"
+    },
+    "HecoChain": {
+        "parent_coin": "HT",
+        "swap_contract_address": "0x9130b257D37A52E52F21054c4DA3450c72f595CE",
+        "fallback_swap_contract": "0x9130b257D37A52E52F21054c4DA3450c72f595CE"
+    },
+    "UTXO": {},
+    "ZHTLC": {},
+    "SLP": {
+        "parent_coin": "SLP"
+    },
+    "RSK Smart Bitcoin": {
+        "parent_coin": "RSK",
+        "swap_contract_address": "0x6D9CE4bD298de38Bafefd15F5C6F5c95313B1d94",
+        "fallback_swap_contract": "0x6D9CE4bD298de38Bafefd15F5C6F5c95313B1d94"
+    },
+    "Moonriver": {
+        "parent_coin": "MOVR",
+        "swap_contract_address": "0x9130b257D37A52E52F21054c4DA3450c72f595CE",
+        "fallback_swap_contract": "0x9130b257D37A52E52F21054c4DA3450c72f595CE"
+    },
+    "Smart Chain": {},
+    "Arbitrum": {
+        "parent_coin": "ETH-ARB20",
+        "swap_contract_address": "0x9130b257d37a52e52f21054c4da3450c72f595ce",
+        "fallback_swap_contract": "0x9130b257d37a52e52f21054c4da3450c72f595ce"
+    },
+    "QRC-20": {
+        "parent_coin": "QTUM",
+        "swap_contract_address": "0x2f754733acd6d753731c00fee32cb484551cc15d",
+        "fallback_swap_contract": "0x2f754733acd6d753731c00fee32cb484551cc15d"
+    },
+    "Ethereum Classic": {
+        "swap_contract_address": "0x6d9ce4BD298DE38bAfEFD15f5C6f5c95313B1d94",
+        "fallback_swap_contract": "0x6d9ce4BD298DE38bAfEFD15f5C6f5c95313B1d94"
+    },
+    "EWT": {
+        "swap_contract_address": "0x304896fc2F242f13dd852b412E7B60C5F495B79c",
+        "fallback_swap_contract": "0x304896fc2F242f13dd852b412E7B60C5F495B79c"
+    },
+    "Moonbeam": {
+        "swap_contract_address": "0x6d9ce4BD298DE38bAfEFD15f5C6f5c95313B1d94",
+        "fallback_swap_contract": "0x6d9ce4BD298DE38bAfEFD15f5C6f5c95313B1d94"
+    },
+    "HRC-20": {
+        "swap_contract_address": "0x9130b257D37A52E52F21054c4DA3450c72f595CE",
+        "fallback_swap_contract": "0x9130b257D37A52E52F21054c4DA3450c72f595CE"
+    },
+    "QTUM": {},
+    "SmartBCH": {
+        "swap_contract_address": "0x25bF2AAB8749AD2e4360b3e0B738f3Cd700C4D68",
+        "fallback_swap_contract": "0x25bF2AAB8749AD2e4360b3e0B738f3Cd700C4D68"
+    },
+    "Ubiq": {
+        "swap_contract_address": "0x9130b257D37A52E52F21054c4DA3450c72f595CE",
+        "fallback_swap_contract": "0x9130b257D37A52E52F21054c4DA3450c72f595CE"
+    },
+    "TENDERMINT": {},
+    "TENDERMINTTOKEN": {
+        "parent_coin": "IRIS"
+    }
+}

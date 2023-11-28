@@ -8,38 +8,11 @@ import requests
 from scan_electrums import get_electrums_report
 
 current_time = time.time()
-script_path = os.path.abspath(os.path.dirname(__file__))
-repo_path = script_path.replace("/utils", "")
-os.chdir(script_path)
+SCRIPT_PATH = os.path.abspath(os.path.dirname(__file__))
+REPO_PATH = SCRIPT_PATH.replace("/utils", "")
+os.chdir(SCRIPT_PATH)
 
 # TODO: Check all coins have an icon.
-icons = [f for f in os.listdir(f"{repo_path}/icons") if os.path.isfile(f"{repo_path}/icons/{f}.png")]
-lightwallet_coins = [f for f in os.listdir(f"{repo_path}/light_wallet_d") if os.path.isfile(f"{repo_path}/light_wallet_d/{f}")]
-electrum_coins = [f for f in os.listdir(f"{repo_path}/electrums") if os.path.isfile(f"{repo_path}/electrums/{f}")]
-ethereum_coins = [f for f in os.listdir(f"{repo_path}/ethereum") if os.path.isfile(f"{repo_path}/ethereum/{f}")]
-explorer_coins = [f for f in os.listdir(f"{repo_path}/explorers") if os.path.isfile(f"{repo_path}/explorers/{f}")]
-
-get_electrums_report()
-with open("electrum_scan_report.json", "r") as f:
-    electrum_scan_report = json.load(f)
-
-with open("../explorers/explorer_paths.json", "r") as f:
-    explorer_paths = json.load(f)
-
-with open("../api_ids/forex_ids.json", "r") as f:
-    forex_ids = json.load(f)
-
-with open("../api_ids/livecoinwatch_ids.json", "r") as f:
-    livecoinwatch_ids = json.load(f)
-
-with open("../api_ids/coingecko_ids.json", "r") as f:
-    coingecko_ids = json.load(f)
-
-with open("../api_ids/coinpaprika_ids.json", "r") as f:
-    coinpaprika_ids = json.load(f)
-
-with open("../slp/bchd_urls.json", "r") as f:
-    bchd_urls = json.load(f)
 
 def colorize(string, color):
     colors = {
@@ -55,9 +28,9 @@ def colorize(string, color):
             return colors[color] + str(string) + '\033[0m'
 
 class CoinConfig:
-    def __init__(self, coin_data: dict):
-
+    def __init__(self, coin_data: dict, rescan_electrums=True):
         self.coin_data = coin_data
+        self.rescan_electrums = rescan_electrums
         self.data = {}
         self.is_testnet = self.is_testnet_network()
         self.ticker = self.coin_data["coin"].replace("-TEST", "")
@@ -107,10 +80,7 @@ class CoinConfig:
                 "explorer_url": "",
                 "explorer_tx_url": "",
                 "explorer_address_url": "",
-                "supported": [],
-                "active": False,
                 "is_testnet": self.is_testnet,
-                "currently_enabled": False,
                 "wallet_only": False
             }
         })
@@ -139,6 +109,10 @@ class CoinConfig:
                 self.data[self.ticker].update({
                     "light_wallet_d_servers": []
                 })
+        if self.rescan_electrums:
+            get_electrums_report()
+        with open("electrum_scan_report.json", "r") as f:
+            self.electrum_scan_report = json.load(f)
 
     def get_protocol_info(self):
         if "protocol_data" in self.coin_data["protocol"]:
@@ -356,13 +330,13 @@ class CoinConfig:
             else:
                 coin = "QTUM"
 
-        if coin in electrum_scan_report:
+        if coin in self.electrum_scan_report:
             with open(f"../electrums/{coin}", "r") as f:
                 electrums = json.load(f)
                 valid_electrums = []
                 for x in ["tcp", "ssl"]:
                     # This also filers ws with tcp/ssl server it is grouped with if valid.
-                    for k, v in electrum_scan_report[coin][x].items():
+                    for k, v in self.electrum_scan_report[coin][x].items():
                         if current_time - v["last_connection"] < 604800: # 1 week grace period
                             for electrum in electrums:
                                 if electrum["url"] == k:
@@ -428,8 +402,6 @@ class CoinConfig:
                 if i[0] not in self.data[self.ticker]:
                     self.data[self.ticker].update({i[0]: i[1]})
 
-
-
 def parse_coins_repo():
     errors = []
     coins_config = {}
@@ -439,7 +411,7 @@ def parse_coins_repo():
     for item in coins_data:
         
         if item["mm2"] == 1:
-                config = CoinConfig(item)
+                config = CoinConfig(item, False)
                 config.get_generics()
                 config.get_protocol_info()
                 config.clean_name()
@@ -590,11 +562,89 @@ def filter_wss(coins_config):
     return coins_config_wss
 
 
+def get_coin_type_map(coins_config):
+    data = {}
+    for ticker in coins_config:
+        coin_type = coins_config[ticker]["type"]
+        if coin_type not in data:
+            data.update({coin_type: {}})
+        for k in ["parent_coin", "swap_contract_address", "fallback_swap_contract"]:
+            if k in coins_config[ticker]:
+                v = coins_config[ticker][k]
+                if k not in data[coin_type]:
+                    data[coin_type].update({k: v})
+    return data
+
+
+def reduce_coins_config(coins_data, coins_config):
+    data = {}
+    excluded_coins = []
+    for i in coins_data:
+        ticker = i["coin"]
+        data[ticker] = {}
+        if ticker in coins_config:
+            config = coins_config[ticker]
+            # exclude keys already in coins file
+            exclude_keys = list(i.keys())
+            # exclude unused keys 
+            exclude_keys += [
+                "supported", "active", "currently_enabled", "type",
+                "swap_contract_address", "fallback_swap_contract"
+                ]
+            for k, v in config.items():
+                if k not in exclude_keys:
+                    data[ticker].update({k: v})
+        else:
+            excluded_coins.append(ticker)
+            print(f"{ticker} in coins file but not coins_config.json, skipping...")
+    return data, excluded_coins
+
+
+def reduce_coins_file(coins_data, excluded_coins):
+    data = []
+    for i in coins_data:
+        if i["coin"] not in excluded_coins:
+            data.append(i)
+    return data
+
 
 if __name__ == "__main__":
+    icons = [f for f in os.listdir(f"{REPO_PATH}/icons") if os.path.isfile(f"{REPO_PATH}/icons/{f}.png")]
+    lightwallet_coins = [f for f in os.listdir(f"{REPO_PATH}/light_wallet_d") if os.path.isfile(f"{REPO_PATH}/light_wallet_d/{f}")]
+    electrum_coins = [f for f in os.listdir(f"{REPO_PATH}/electrums") if os.path.isfile(f"{REPO_PATH}/electrums/{f}")]
+    ethereum_coins = [f for f in os.listdir(f"{REPO_PATH}/ethereum") if os.path.isfile(f"{REPO_PATH}/ethereum/{f}")]
+    explorer_coins = [f for f in os.listdir(f"{REPO_PATH}/explorers") if os.path.isfile(f"{REPO_PATH}/explorers/{f}")]
+
+
+    with open("../explorers/explorer_paths.json", "r") as f:
+        explorer_paths = json.load(f)
+
+    with open("../api_ids/forex_ids.json", "r") as f:
+        forex_ids = json.load(f)
+
+    with open("../api_ids/livecoinwatch_ids.json", "r") as f:
+        livecoinwatch_ids = json.load(f)
+
+    with open("../api_ids/coingecko_ids.json", "r") as f:
+        coingecko_ids = json.load(f)
+
+    with open("../api_ids/coinpaprika_ids.json", "r") as f:
+        coinpaprika_ids = json.load(f)
+
+    with open("../slp/bchd_urls.json", "r") as f:
+        bchd_urls = json.load(f)
+
     coins_config, nodata = parse_coins_repo()
     with open("coins_config.json", "w+") as f:
         json.dump(coins_config, f, indent=4)
+
+    data = get_coin_type_map(coins_config)
+    with open(f"{SCRIPT_PATH}/coin_type_map.json", "w+") as f:
+        json.dump(data, f, indent=4)
+    with open(f"{SCRIPT_PATH}/coin_type_map_minified.json", "w+") as f:
+        json.dump(data, f)
+
+    
     coins_config_ssl = filter_ssl(deepcopy(coins_config))
     coins_config_wss = filter_wss(deepcopy(coins_config))
     coins_config_tcp = filter_tcp(deepcopy(coins_config), coins_config_ssl)
@@ -611,3 +661,29 @@ if __name__ == "__main__":
     print(f"Total coins with SSL: {len(coins_config_ssl)}")
     print(f"Total coins with TCP: {len(coins_config_tcp)}")
     print(f"Total coins with WSS: {len(coins_config_wss)}")
+
+    # Map parent coin to coin_type and swap contract addresses
+    with open(f"{REPO_PATH}/coins", "r") as f:
+        coins_data = json.load(f)
+        
+    for k, v in {
+        "original": "coins_config",
+        "ssl": "coins_config_ssl",
+        "tcp": "coins_config_tcp",
+        "wss": "coins_config_wss"
+    }.items():
+        
+        with open(f"{SCRIPT_PATH}/{v}.json", "r") as f:
+            coins_config = json.load(f)
+
+        
+        data, excluded_coins = reduce_coins_config(coins_data, coins_config)
+        with open(f"{SCRIPT_PATH}/{v}_reduced.json", "w+") as f:
+            json.dump(data, f, indent=4)
+        with open(f"{SCRIPT_PATH}/{v}_minified.json", "w+") as f:
+            json.dump(data, f)
+        
+        data = reduce_coins_file(coins_data, excluded_coins)
+        with open(f"{SCRIPT_PATH}/coins_{k}_minified.json", "w+") as f:
+            json.dump(data, f)
+    
